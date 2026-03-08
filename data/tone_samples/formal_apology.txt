@@ -1,0 +1,15 @@
+Subject: Sincere Apologies for the Service Disruption on March 6th
+
+Dear Mr. Patel,
+
+I am writing to formally apologize for the service disruption your account experienced on March 6th between 14:00 and 17:30 GMT. We take full responsibility for this lapse and understand the significant inconvenience it caused to your operations.
+
+The disruption was caused by an unforeseen failure in our primary data centre's cooling infrastructure. Upon identification, our engineering team implemented emergency failover procedures; however, the transition took longer than our standard recovery window. This is not the level of service we commit to, and we acknowledge that this incident fell short of your expectations.
+
+To rectify the situation, we have credited your account with a full month of service fees and have implemented additional redundancy measures to prevent recurrence. A detailed incident report, including root cause analysis and remediation steps, will be delivered to you within 48 hours.
+
+We value your continued partnership and are committed to restoring your confidence in our service. Should you wish to discuss this matter further, please do not hesitate to schedule a call with our dedicated account team.
+
+Sincerely,
+Rachel Morrison
+VP of Customer Operations

@@ -1,0 +1,6 @@
+primary_model: gpt-4o
+fallback_chain:
+  - claude-3-5-sonnet-20241022
+  - cohere/command-r-plus
+max_retries: 3
+fallback_on_retry: 2

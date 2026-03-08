@@ -1,0 +1,13 @@
+{
+  "default": {
+    "user_id": "default",
+    "name": "Vinit",
+    "company": "Acme Corp",
+    "role": "Software Engineer",
+    "default_tone": "formal",
+    "sign_off_preference": "Best regards",
+    "writing_style_notes": "",
+    "prior_drafts": [],
+    "known_contacts": {}
+  }
+}
