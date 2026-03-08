@@ -1,6 +1,10 @@
 import json
-from pathlib import Path
+import os
+
 from typing import Optional
+
+
+
 
 from langchain_core.output_parsers import JsonOutputParser
 from langchain_core.prompts import ChatPromptTemplate
@@ -9,6 +13,28 @@ from pydantic import BaseModel, Field
 
 from src.agents.intent_templates import INTENT_TEMPLATES
 from src.models.state import EmailAssistantState, EmailDraftDict
+
+from dotenv import load_dotenv
+from langchain_openai import ChatOpenAI
+from pydantic import SecretStr
+from pathlib import Path
+import sys
+sys.path.insert(0, str(Path(__file__).parent.parent.parent))
+
+env_path = Path(__file__).resolve().parent.parent.parent / ".env"
+result = load_dotenv(str(env_path))
+
+print(f"load_dotenv returned: {result}")
+
+# # Get API keys with validation
+openai_api_key = os.getenv("OPENAI_API_KEY")
+
+print(f"OPENAI_API_KEY: {'set' if openai_api_key else 'not set'}")
+llm = ChatOpenAI(
+    model="gpt-4o-mini",
+    temperature=0,
+    api_key=SecretStr(openai_api_key) if openai_api_key else None,
+)
 
 MAX_GENERATION_RETRIES = 2
 
@@ -149,7 +175,7 @@ def is_surgical_edit(raw_input: str, prior_draft: Optional[EmailDraftDict]) -> b
 
 
 def _build_surgical_edit_chain(model: str) -> object:
-    llm = ChatOpenAI(model=model, temperature=0.2)
+    
     prompt = ChatPromptTemplate.from_messages(
         [
             ("system", SURGICAL_EDIT_SYSTEM_PROMPT),
@@ -160,7 +186,7 @@ def _build_surgical_edit_chain(model: str) -> object:
 
 
 def _build_draft_chain(model: str, temperature: float) -> object:
-    llm = ChatOpenAI(model=model, temperature=temperature)
+    
     parser = JsonOutputParser(pydantic_object=EmailDraftSchema)
     prompt = ChatPromptTemplate.from_messages(
         [("system", SYSTEM_PROMPT), ("human", USER_PROMPT)]

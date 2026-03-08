@@ -7,6 +7,29 @@ from pydantic import BaseModel, Field
 
 from src.models.state import EmailAssistantState, ReviewResultDict
 
+import os
+import sys
+from dotenv import load_dotenv
+from langchain_openai import ChatOpenAI
+from pydantic import SecretStr
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).parent.parent.parent))
+
+env_path = Path(__file__).resolve().parent.parent.parent / ".env"
+result = load_dotenv(str(env_path))
+
+print(f"load_dotenv returned: {result}")
+
+# # Get API keys with validation
+openai_api_key = os.getenv("OPENAI_API_KEY")
+
+print(f"OPENAI_API_KEY: {'set' if openai_api_key else 'not set'}")
+llm = ChatOpenAI(
+    model="gpt-4o-mini",
+    temperature=0,
+    api_key=SecretStr(openai_api_key) if openai_api_key else None,
+)
+
 PASS_THRESHOLDS = {
     "grammar_score": 0.75,
     "tone_alignment_score": 0.70,
@@ -130,7 +153,7 @@ def deduplicate_issues(new_issues: list[str], state: EmailAssistantState) -> lis
 
 
 def _build_tone_check_chain(tone: str) -> object:
-    llm = ChatOpenAI(model="gpt-4o-mini", temperature=0)
+    
     prompt = ChatPromptTemplate.from_messages(
         [
             (
@@ -145,7 +168,6 @@ def _build_tone_check_chain(tone: str) -> object:
 
 
 def _build_review_chain() -> object:
-    llm = ChatOpenAI(model="gpt-4o", temperature=0)
     parser = JsonOutputParser(pydantic_object=ReviewResult)
     prompt = ChatPromptTemplate.from_messages(
         [("system", REVIEW_SYSTEM_PROMPT), ("human", REVIEW_USER_PROMPT)]

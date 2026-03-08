@@ -1,4 +1,29 @@
+
+import os
+from pathlib import Path
+import sys
 from typing import TypedDict
+
+from dotenv import load_dotenv
+from langchain_openai import ChatOpenAI
+from pydantic import SecretStr
+sys.path.insert(0, str(Path(__file__).parent.parent.parent))
+
+# # Load environment variables from .env file (dynamic path)
+env_path = Path(__file__).resolve().parent.parent.parent / ".env"
+result = load_dotenv(str(env_path))
+
+print(f"load_dotenv returned: {result}")
+
+# # Get API keys with validation
+openai_api_key = os.getenv("OPENAI_API_KEY")
+print(f"OPENAI_API_KEY: {'set' if openai_api_key else 'not set'}")
+llm = ChatOpenAI(
+    model="gpt-4o-mini",
+    temperature=0,
+    api_key=SecretStr(openai_api_key) if openai_api_key else None,
+)
+
 
 
 class ParsedContextDict(TypedDict, total=False):

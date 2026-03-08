@@ -8,6 +8,29 @@ from langchain_openai import ChatOpenAI
 
 from src.models.state import EmailAssistantState, EmailDraftDict
 
+import os
+import sys
+from dotenv import load_dotenv
+from langchain_openai import ChatOpenAI
+from pydantic import SecretStr
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).parent.parent.parent))
+
+env_path = Path(__file__).resolve().parent.parent.parent / ".env"
+result = load_dotenv(str(env_path))
+
+print(f"load_dotenv returned: {result}")
+
+# # Get API keys with validation
+openai_api_key = os.getenv("OPENAI_API_KEY")
+
+print(f"OPENAI_API_KEY: {'set' if openai_api_key else 'not set'}")
+llm = ChatOpenAI(
+    model="gpt-4o-mini",
+    temperature=0,
+    api_key=SecretStr(openai_api_key) if openai_api_key else None,
+)
+
 VOICE_MATCH_SYSTEM_PROMPT = """You are helping refine an email draft to better match a specific person's writing style.
 
 Do NOT change the content, facts, intent, or tone category.
@@ -97,7 +120,7 @@ def find_prior_context(
 
 
 def _build_voice_match_chain() -> object:
-    llm = ChatOpenAI(model="gpt-4o-mini", temperature=0.2)
+    
     prompt = ChatPromptTemplate.from_messages(
         [
             ("system", VOICE_MATCH_SYSTEM_PROMPT),

@@ -7,7 +7,24 @@
     "default_tone": "formal",
     "sign_off_preference": "Best regards",
     "writing_style_notes": "",
-    "prior_drafts": [],
+    "prior_drafts": [
+      {
+        "date": "2026-03-08",
+        "intent": "other",
+        "recipient_type": "unknown",
+        "recipient_name": null,
+        "subject_hint": "",
+        "draft_summary": "Subject: Inquiry Regarding Upcoming Meeting Schedule\n\nDear [Name],\n\nI am writing to inquire about the schedule for our upcoming meeting. It is important for me to confirm the date and time to ensure m..."
+      },
+      {
+        "date": "2026-03-08",
+        "intent": "other",
+        "recipient_type": "unknown",
+        "recipient_name": null,
+        "subject_hint": "",
+        "draft_summary": "Subject: Request for Information\n\nDear [Name],\n\nI am writing to request additional information regarding the project we discussed in our last meeting. It is essential for me to have a clearer understa..."
+      }
+    ],
     "known_contacts": {}
   }
 }

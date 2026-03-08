@@ -1,3 +1,4 @@
+import sys
 from typing import Optional
 
 from langchain_core.output_parsers import JsonOutputParser
@@ -6,6 +7,28 @@ from langchain_openai import ChatOpenAI
 from pydantic import BaseModel, Field
 
 from src.models.state import EmailAssistantState, ParsedContextDict
+import os
+from dotenv import load_dotenv
+from langchain_openai import ChatOpenAI
+from pydantic import SecretStr
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).parent.parent.parent))
+
+env_path = Path(__file__).resolve().parent.parent.parent / ".env"
+result = load_dotenv(str(env_path))
+
+print(f"load_dotenv returned: {result}")
+
+# # Get API keys with validation
+openai_api_key = os.getenv("OPENAI_API_KEY")
+
+print(f"OPENAI_API_KEY: {'set' if openai_api_key else 'not set'}")
+llm = ChatOpenAI(
+    model="gpt-4o-mini",
+    temperature=0,
+    api_key=SecretStr(openai_api_key) if openai_api_key else None,
+)
+
 
 REFINEMENT_SIGNALS = [
     "make it",
@@ -75,7 +98,7 @@ class ParsedContext(BaseModel):
 
 
 def build_parser_chain() -> object:
-    llm = ChatOpenAI(model="gpt-4o", temperature=0)
+   
     parser = JsonOutputParser(pydantic_object=ParsedContext)
     prompt = ChatPromptTemplate.from_messages(
         [("system", SYSTEM_PROMPT), ("human", USER_PROMPT)]
@@ -89,7 +112,7 @@ def is_refinement_input(raw_input: str) -> bool:
 
 
 def _build_refinement_chain() -> object:
-    llm = ChatOpenAI(model="gpt-4o", temperature=0)
+   
     prompt = ChatPromptTemplate.from_messages(
         [
             ("system", REFINEMENT_SYSTEM_PROMPT),
