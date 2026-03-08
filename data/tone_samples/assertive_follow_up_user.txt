@@ -1,12 +1,12 @@
-Subject: Follow Up: Invoice Request Status
+Subject: Follow Up: Missing Invoice Status
 
 Dear [Name],
 
-I am following up on the invoice request submitted on [insert date]. We need to confirm the status to ensure timely processing.
+I am following up on the missing invoice that was due on [insert due date]. We need to resolve this to ensure our records are accurate.
 
-Please provide an update on the invoice by the end of the day tomorrow. This will help us maintain our project timeline.
+Please provide an update on the status of the invoice by the end of the day tomorrow. This will help us avoid any delays in processing.
 
-I appreciate your prompt attention to this matter.
+Thank you for your prompt attention to this matter.
 
 Best regards,
 Vinit
