@@ -10,80 +10,170 @@
     "prior_drafts": [
       {
         "date": "2026-03-08",
-        "intent": "other",
-        "recipient_type": "unknown",
-        "recipient_name": null,
-        "subject_hint": "",
-        "draft_summary": "Subject: Inquiry Regarding Upcoming Meeting Schedule\n\nDear [Name],\n\nI am writing to inquire about the schedule for our upcoming meeting. It is important for me to confirm the date and time to ensure m..."
-      },
-      {
-        "date": "2026-03-08",
-        "intent": "other",
-        "recipient_type": "unknown",
-        "recipient_name": null,
-        "subject_hint": "",
-        "draft_summary": "Subject: Request for Information\n\nDear [Name],\n\nI am writing to request additional information regarding the project we discussed in our last meeting. It is essential for me to have a clearer understa..."
-      },
-      {
-        "date": "2026-03-08",
-        "intent": "other",
-        "recipient_type": "other",
-        "recipient_name": null,
-        "subject_hint": "",
-        "draft_summary": "Subject: Inquiry Regarding Upcoming Meeting\n\nDear [Name],\n\nI am writing to inquire about the agenda for the upcoming meeting scheduled for next week. Understanding the topics to be discussed will allo..."
-      },
-      {
-        "date": "2026-03-08",
-        "intent": "other",
-        "recipient_type": "unknown",
-        "recipient_name": "Sarah",
-        "subject_hint": "",
-        "draft_summary": "Subject: Request for Information\n\nDear Sarah,\n\nI am writing to request additional information regarding the recent project updates. Having a comprehensive understanding of the current status will enab..."
-      },
-      {
-        "date": "2026-03-08",
-        "intent": "apology",
-        "recipient_type": "client",
-        "recipient_name": "Sarah",
-        "subject_hint": "apology for delayed shipment",
-        "draft_summary": "Subject: Apology for Delayed Shipment\n\nDear Sarah,\n\nI would like to sincerely apologize for the delay in the shipment of your order.\n\nThis delay was due to unforeseen circumstances that impacted our l..."
-      },
-      {
-        "date": "2026-03-08",
-        "intent": "apology",
-        "recipient_type": "client",
-        "recipient_name": "Sarah",
-        "subject_hint": "apology for delayed shipment",
-        "draft_summary": "Subject: Apology for Delayed Shipment\n\nDear Sarah,\n\nI would like to sincerely apologize for the delay in the shipment of your order.\n\nThis delay was due to unforeseen circumstances that impacted our l..."
-      },
-      {
-        "date": "2026-03-08",
-        "intent": "internal_update",
-        "recipient_type": "colleague",
-        "recipient_name": "John",
-        "subject_hint": "Q1 report",
-        "draft_summary": "Subject: Update on the Q1 Report\n\nHi John,\n\nHope you're doing well! I wanted to touch base regarding the Q1 report.\n\nAs we approach the deadline, I thought it’d be good to see how everything's coming ..."
+        "intent": "informational",
+        "recipient_type": "partner",
+        "recipient_name": "Alex",
+        "subject_hint": "new analytics tool",
+        "draft_summary": "Subject: Introducing Our New Analytics Tool\n\nDear Alex,\n\nWe are excited to announce the launch of our new analytics tool designed to enhance your data insights and reporting capabilities. This tool wi..."
       },
       {
         "date": "2026-03-08",
         "intent": "informational",
         "recipient_type": "partner",
-        "recipient_name": null,
-        "subject_hint": "new product launch",
-        "draft_summary": "Subject: New Product Launch Announcement\n\nDear [Name],\n\nWe are excited to announce the launch of our new product, which will be available starting next month. This innovative solution is designed to e..."
+        "recipient_name": "Alex",
+        "subject_hint": "new analytics tool",
+        "draft_summary": "Subject: Introducing Our New Analytics Tool\n\nDear Alex,\n\nWe are excited to announce the launch of our new analytics tool designed to enhance your data insights and reporting capabilities. This tool wi..."
       },
       {
         "date": "2026-03-08",
-        "intent": "outreach",
-        "recipient_type": "other",
+        "intent": "internal_update",
+        "recipient_type": "colleague",
         "recipient_name": null,
-        "subject_hint": "referral email for software engineer role",
-        "draft_summary": "Subject: Referral for Software Engineer Role\n\nDear [Name],\n\nI hope this message finds you well. I am reaching out to discuss a potential candidate for the Software Engineer position within your team. ..."
+        "subject_hint": "Q1 product launch delay",
+        "draft_summary": "Subject: Update on Q1 Product Launch Delay\n\nHi John,\n\nHope you're doing well! I wanted to give you a quick update regarding the Q1 product launch.\n\nUnfortunately, we've hit a few unexpected delays tha..."
+      },
+      {
+        "date": "2026-03-08",
+        "intent": "follow_up",
+        "recipient_type": "colleague",
+        "recipient_name": null,
+        "subject_hint": "Follow-up on new date confirmation",
+        "draft_summary": "Subject: Follow-up on New Date Confirmation\n\nHi John,\n\nHope you're doing well! I wanted to check in regarding the new date confirmation we discussed last week.\n\nHave you had a chance to finalize the d..."
+      },
+      {
+        "date": "2026-03-08",
+        "intent": "follow_up",
+        "recipient_type": "colleague",
+        "recipient_name": null,
+        "subject_hint": "Follow-up on new date confirmation",
+        "draft_summary": "Subject: Follow-up on New Date Confirmation\n\nDear John,\n\nI am writing to follow up on the confirmation of the new date for our upcoming meeting. It is important for us to finalize this detail to ensur..."
+      },
+      {
+        "date": "2026-03-08",
+        "intent": "thank_you",
+        "recipient_type": "manager",
+        "recipient_name": "David",
+        "subject_hint": "Thank you for supporting my promotion",
+        "draft_summary": "Subject: Thank You for Supporting My Promotion\n\nDear Mr. David,\n\nI would like to express my sincere gratitude for your support regarding my recent promotion. Your encouragement and guidance have been ..."
+      },
+      {
+        "date": "2026-03-08",
+        "intent": "follow_up",
+        "recipient_type": "manager",
+        "recipient_name": "David",
+        "subject_hint": "Follow up to schedule a meeting",
+        "draft_summary": "Subject: Follow up to schedule a meeting\n\nDear David,\n\nI am writing to follow up on our previous discussion regarding the scheduling of a meeting. It is essential for us to finalize the date and time ..."
+      },
+      {
+        "date": "2026-03-08",
+        "intent": "other",
+        "recipient_type": "manager",
+        "recipient_name": null,
+        "subject_hint": "",
+        "draft_summary": "Subject: Inquiry Regarding Project Status\n\nDear David,\n\nI am writing to inquire about the current status of our ongoing projects. Understanding the progress and any potential challenges will allow me ..."
+      },
+      {
+        "date": "2026-03-08",
+        "intent": "request",
+        "recipient_type": "vendor",
+        "recipient_name": null,
+        "subject_hint": "missing invoice",
+        "draft_summary": "Subject: Urgent: Missing Invoice Request\n\nDear [Name],\n\nWe have not yet received the invoice for our recent transaction. This document is essential for our records and timely processing.\n\nPlease send ..."
+      },
+      {
+        "date": "2026-03-08",
+        "intent": "apology",
+        "recipient_type": "client",
+        "recipient_name": "Sarah",
+        "subject_hint": "apology for delayed shipment",
+        "draft_summary": "Subject: Apology for Delayed Shipment\n\nDear Sarah,\n\nI am writing to sincerely apologize for the delay in the shipment of your order.\n\nI understand that this situation may have caused inconvenience, an..."
+      },
+      {
+        "date": "2026-03-08",
+        "intent": "request",
+        "recipient_type": "vendor",
+        "recipient_name": null,
+        "subject_hint": "request for missing invoice",
+        "draft_summary": "Subject: Request for Missing Invoice\n\nDear [Name],\n\nWe have not received the invoice for our recent transaction. This document is crucial for our accounting and payment processes.\n\nPlease send the mis..."
+      },
+      {
+        "date": "2026-03-08",
+        "intent": "follow_up",
+        "recipient_type": "vendor",
+        "recipient_name": null,
+        "subject_hint": "follow up on invoice request",
+        "draft_summary": "Subject: Follow Up: Invoice Request Status\n\nDear [Name],\n\nI am following up on the invoice request submitted on [insert date]. We need to confirm the status to ensure timely processing.\n\nPlease provid..."
+      },
+      {
+        "date": "2026-03-08",
+        "intent": "request",
+        "recipient_type": "manager",
+        "recipient_name": "John",
+        "subject_hint": "budget approval for a new laptop",
+        "draft_summary": "Subject: Request for Budget Approval for a New Laptop\n\nDear Mr. John,\n\nI am writing to request your approval for the budget allocation necessary to purchase a new laptop. The current device is no long..."
+      },
+      {
+        "date": "2026-03-08",
+        "intent": "request",
+        "recipient_type": "manager",
+        "recipient_name": "John",
+        "subject_hint": "budget approval for a new laptop",
+        "draft_summary": "Subject: Request for Budget Approval for a New Laptop\n\nDear Mr. John,\n\nI am writing to request your approval for the budget allocation necessary to purchase a new laptop. The current device is no long..."
+      },
+      {
+        "date": "2026-03-08",
+        "intent": "request",
+        "recipient_type": "manager",
+        "recipient_name": "John",
+        "subject_hint": "Budget approval for a new laptop",
+        "draft_summary": "Subject: Request for Budget Approval for a New Laptop\n\nDear Mr. John,\n\nI am requesting your approval for the budget to purchase a new laptop. My current device is inadequate and hindering my productiv..."
+      },
+      {
+        "date": "2026-03-08",
+        "intent": "request",
+        "recipient_type": "manager",
+        "recipient_name": "John",
+        "subject_hint": "Budget approval for a new laptop",
+        "draft_summary": "Subject: Request for Budget Approval for a New Laptop\n\nDear Mr. John,\n\nI am writing to request your approval for the budget allocation necessary to purchase a new laptop. The current device is no long..."
+      },
+      {
+        "date": "2026-03-08",
+        "intent": "request",
+        "recipient_type": "manager",
+        "recipient_name": "John",
+        "subject_hint": "Follow up on budget approval",
+        "draft_summary": "Subject: Follow Up on Budget Approval\n\nDear Mr. John,\n\nI am writing to follow up on the status of the budget approval that was submitted for review. As the deadline for our upcoming project approaches..."
+      },
+      {
+        "date": "2026-03-08",
+        "intent": "request",
+        "recipient_type": "manager",
+        "recipient_name": "John",
+        "subject_hint": "Budget approval for new laptop",
+        "draft_summary": "Subject: Request for Budget Approval for New Laptop\n\nDear Mr. John,\n\nI am writing to request your approval for the budget allocated for the purchase of a new laptop. This request is essential to ensur..."
+      },
+      {
+        "date": "2026-03-08",
+        "intent": "follow_up",
+        "recipient_type": "manager",
+        "recipient_name": "John",
+        "subject_hint": "Follow up on budget approval",
+        "draft_summary": "Subject: Follow up on budget approval\n\nDear John,\n\nI am writing to follow up on our recent conversation regarding the budget approval. I understand your concerns, but I would like to emphasize the pot..."
+      },
+      {
+        "date": "2026-03-08",
+        "intent": "follow_up",
+        "recipient_type": "manager",
+        "recipient_name": "John",
+        "subject_hint": "Follow up on budget approval",
+        "draft_summary": "Subject: Follow up on budget approval\n\nDear John,\n\nI am following up on our conversation about the budget approval. I believe the productivity benefits of this budget are significant.\n\nInvesting in th..."
       }
     ],
     "known_contacts": {
       "client": "Sarah",
-      "colleague": "John"
+      "colleague": "John",
+      "partner": "Alex",
+      "manager": "John"
     }
   }
 }

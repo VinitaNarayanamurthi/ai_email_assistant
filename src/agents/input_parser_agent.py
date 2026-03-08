@@ -53,11 +53,19 @@ Extract structured information from the user's email request. Be conservative:
 
 Recipient types: client, colleague, manager, partner, vendor, other
 Tone hints (only if user explicitly states): formal, casual, assertive
+
+For context_notes — capture any situational background the draft writer needs:
+- Prior decisions: "request was previously declined", "they said no", "she approved"
+- Relationship history: "met at conference last week", "ongoing project since Q3"
+- Specific goals: "need approval by Friday", "want to persuade", "address their objection"
+- Any conversational context the user references (e.g. "He said no") that informs the email's angle
 """
 
 USER_PROMPT = """Parse the following email request:
 
 "{raw_input}"
+
+{prior_context_section}
 
 {format_instructions}
 
@@ -101,12 +109,31 @@ class ParsedContext(BaseModel):
 
 
 def build_parser_chain() -> object:
-   
     parser = JsonOutputParser(pydantic_object=ParsedContext)
     prompt = ChatPromptTemplate.from_messages(
         [("system", SYSTEM_PROMPT), ("human", USER_PROMPT)]
     ).partial(format_instructions=parser.get_format_instructions())
     return prompt | llm | parser
+
+
+def _format_prior_context_section(prior: ParsedContextDict) -> str:
+    parts: list[str] = [
+        "Conversation context from the previous email in this session "
+        "(carry over any details still relevant — do NOT override what the user explicitly states in the new request):"
+    ]
+    recipient_type = prior.get("recipient_type")
+    recipient_name = prior.get("recipient_name")
+    subject_hint = prior.get("subject_hint")
+    tone_hint = prior.get("tone_hint")
+    if recipient_type:
+        parts.append(f"  - Recipient type: {recipient_type}")
+    if recipient_name:
+        parts.append(f"  - Recipient name: {recipient_name}")
+    if subject_hint:
+        parts.append(f"  - Previous subject: {subject_hint}")
+    if tone_hint:
+        parts.append(f"  - Established tone: {tone_hint}")
+    return "\n".join(parts)
 
 
 def is_refinement_input(raw_input: str) -> bool:
@@ -162,8 +189,16 @@ def input_parser_agent(state: EmailAssistantState) -> dict[str, object]:
 
     chain = build_parser_chain()
 
+    prior_context_section = (
+        _format_prior_context_section(prior_context)
+        if prior_context
+        else ""
+    )
+
     try:
-        parsed: dict[str, object] = chain.invoke({"raw_input": raw_input})  # type: ignore[assignment]
+        parsed: dict[str, object] = chain.invoke(  # type: ignore[assignment]
+            {"raw_input": raw_input, "prior_context_section": prior_context_section}
+        )
 
         user_profile = state.get("user_profile") or {}
         default_tone = user_profile.get("default_tone")
@@ -173,7 +208,7 @@ def input_parser_agent(state: EmailAssistantState) -> dict[str, object]:
         return {"parsed_context": parsed, "parse_error": None}
 
     except Exception as e:
-        user_profile = state.get("user_profile") or {}
+        user_profile = state.get("user_profile") or {}  # noqa: F841 (already read above)
         fallback: ParsedContextDict = {
             "recipient_type": "recipient",
             "recipient_name": None,
