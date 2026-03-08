@@ -88,9 +88,7 @@ def is_refinement_input(raw_input: str) -> bool:
     return any(signal in lowered for signal in REFINEMENT_SIGNALS) and len(lowered) < 100
 
 
-def apply_refinement_to_context(
-    refinement: str, prior_context: ParsedContextDict
-) -> dict[str, object]:
+def _build_refinement_chain() -> object:
     llm = ChatOpenAI(model="gpt-4o", temperature=0)
     prompt = ChatPromptTemplate.from_messages(
         [
@@ -98,9 +96,15 @@ def apply_refinement_to_context(
             ("human", REFINEMENT_USER_PROMPT),
         ]
     )
-    chain = prompt | llm | JsonOutputParser()
+    return prompt | llm | JsonOutputParser()
+
+
+def apply_refinement_to_context(
+    refinement: str, prior_context: ParsedContextDict
+) -> dict[str, object]:
+    chain = _build_refinement_chain()
     try:
-        updated = chain.invoke(
+        updated = chain.invoke(  # type: ignore[attr-defined]
             {"prior_context": str(prior_context), "refinement": refinement}
         )
         return {"parsed_context": updated, "parse_error": None}

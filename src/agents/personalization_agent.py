@@ -96,6 +96,17 @@ def find_prior_context(
     return None
 
 
+def _build_voice_match_chain() -> object:
+    llm = ChatOpenAI(model="gpt-4o-mini", temperature=0.2)
+    prompt = ChatPromptTemplate.from_messages(
+        [
+            ("system", VOICE_MATCH_SYSTEM_PROMPT),
+            ("human", VOICE_MATCH_USER_PROMPT),
+        ]
+    )
+    return prompt | llm | JsonOutputParser()
+
+
 def apply_voice_matching(
     draft: EmailDraftDict,
     profile: dict[str, object],
@@ -107,16 +118,8 @@ def apply_voice_matching(
     if not style_notes or len(style_notes) < 20:
         return draft, log
 
-    llm = ChatOpenAI(model="gpt-4o-mini", temperature=0.2)
-    prompt = ChatPromptTemplate.from_messages(
-        [
-            ("system", VOICE_MATCH_SYSTEM_PROMPT),
-            ("human", VOICE_MATCH_USER_PROMPT),
-        ]
-    )
-
     try:
-        chain = prompt | llm | JsonOutputParser()
+        chain = _build_voice_match_chain()
         refined: EmailDraftDict = chain.invoke(  # type: ignore[assignment]
             {
                 "style_notes": style_notes,

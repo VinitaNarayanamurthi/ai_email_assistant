@@ -148,10 +148,7 @@ def log_draft_to_profile(
     return profile
 
 
-def extract_style_from_edits(original: str, edited: str) -> list[str]:
-    if not original or not edited or original.strip() == edited.strip():
-        return []
-
+def _build_style_diff_chain() -> object:
     llm = ChatOpenAI(model="gpt-4o-mini", temperature=0)
     prompt = ChatPromptTemplate.from_messages(
         [
@@ -162,10 +159,17 @@ def extract_style_from_edits(original: str, edited: str) -> list[str]:
             ),
         ]
     )
-    chain = prompt | llm | JsonOutputParser()
+    return prompt | llm | JsonOutputParser()
+
+
+def extract_style_from_edits(original: str, edited: str) -> list[str]:
+    if not original or not edited or original.strip() == edited.strip():
+        return []
+
+    chain = _build_style_diff_chain()
 
     try:
-        observations = chain.invoke({"original": original, "edited": edited})
+        observations = chain.invoke({"original": original, "edited": edited})  # type: ignore[attr-defined]
         return observations if isinstance(observations, list) else []
     except Exception:
         return []

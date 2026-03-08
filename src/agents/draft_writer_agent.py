@@ -148,22 +148,35 @@ def is_surgical_edit(raw_input: str, prior_draft: Optional[EmailDraftDict]) -> b
     return any(signal in lowered for signal in SURGICAL_EDIT_SIGNALS)
 
 
-def apply_surgical_edit(state: EmailAssistantState) -> dict[str, object]:
-    prior_draft = state.get("draft") or state.get("personalized_draft")
-    raw_input = str(state.get("raw_input") or "")
-    active_model = str(state.get("active_model") or "gpt-4o")
-
-    llm = ChatOpenAI(model=active_model, temperature=0.2)
+def _build_surgical_edit_chain(model: str) -> object:
+    llm = ChatOpenAI(model=model, temperature=0.2)
     prompt = ChatPromptTemplate.from_messages(
         [
             ("system", SURGICAL_EDIT_SYSTEM_PROMPT),
             ("human", SURGICAL_EDIT_USER_PROMPT),
         ]
     )
-    chain = prompt | llm | JsonOutputParser()
+    return prompt | llm | JsonOutputParser()
+
+
+def _build_draft_chain(model: str, temperature: float) -> object:
+    llm = ChatOpenAI(model=model, temperature=temperature)
+    parser = JsonOutputParser(pydantic_object=EmailDraftSchema)
+    prompt = ChatPromptTemplate.from_messages(
+        [("system", SYSTEM_PROMPT), ("human", USER_PROMPT)]
+    )
+    return prompt | llm | parser
+
+
+def apply_surgical_edit(state: EmailAssistantState) -> dict[str, object]:
+    prior_draft = state.get("draft") or state.get("personalized_draft")
+    raw_input = str(state.get("raw_input") or "")
+    active_model = str(state.get("active_model") or "gpt-4o")
+
+    chain = _build_surgical_edit_chain(active_model)
 
     try:
-        updated_draft = chain.invoke(
+        updated_draft = chain.invoke(  # type: ignore[attr-defined]
             {
                 "existing_draft": json.dumps(prior_draft, indent=2),
                 "edit_instruction": raw_input,
@@ -196,16 +209,11 @@ def draft_writer_agent(state: EmailAssistantState) -> dict[str, object]:
     few_shot_section = load_tone_sample(tone_sample_ref)
 
     temperature = 0.4 + (0.1 * min(retry_count, 2))
-    llm = ChatOpenAI(model=active_model, temperature=temperature)
-    parser = JsonOutputParser(pydantic_object=EmailDraftSchema)
-    prompt = ChatPromptTemplate.from_messages(
-        [("system", SYSTEM_PROMPT), ("human", USER_PROMPT)]
-    )
-    chain = prompt | llm | parser
+    chain = _build_draft_chain(active_model, temperature)
 
     for attempt in range(MAX_GENERATION_RETRIES):
         try:
-            draft = chain.invoke(
+            draft = chain.invoke(  # type: ignore[attr-defined]
                 {
                     "intent_label": intent.replace("_", " "),
                     "tone_directives_formatted": tone_directives_formatted,

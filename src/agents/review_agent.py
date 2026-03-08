@@ -129,11 +129,7 @@ def deduplicate_issues(new_issues: list[str], state: EmailAssistantState) -> lis
     return fresh_issues
 
 
-def run_targeted_tone_check(state: EmailAssistantState) -> dict[str, object]:
-    draft = state.get("personalized_draft") or state.get("draft")
-    tone = str(state.get("tone") or "formal")
-    prior_result = state.get("review_result") or {}
-
+def _build_tone_check_chain(tone: str) -> object:
     llm = ChatOpenAI(model="gpt-4o-mini", temperature=0)
     prompt = ChatPromptTemplate.from_messages(
         [
@@ -145,7 +141,24 @@ def run_targeted_tone_check(state: EmailAssistantState) -> dict[str, object]:
             ("human", "{draft_json}"),
         ]
     )
-    chain = prompt | llm | JsonOutputParser()
+    return prompt | llm | JsonOutputParser()
+
+
+def _build_review_chain() -> object:
+    llm = ChatOpenAI(model="gpt-4o", temperature=0)
+    parser = JsonOutputParser(pydantic_object=ReviewResult)
+    prompt = ChatPromptTemplate.from_messages(
+        [("system", REVIEW_SYSTEM_PROMPT), ("human", REVIEW_USER_PROMPT)]
+    )
+    return prompt | llm | parser
+
+
+def run_targeted_tone_check(state: EmailAssistantState) -> dict[str, object]:
+    draft = state.get("personalized_draft") or state.get("draft")
+    tone = str(state.get("tone") or "formal")
+    prior_result = state.get("review_result") or {}
+
+    chain = _build_tone_check_chain(tone)
 
     try:
         result: dict[str, object] = chain.invoke(  # type: ignore[assignment]
@@ -220,12 +233,7 @@ def review_validator_agent(state: EmailAssistantState) -> dict[str, object]:
         }
         return {"review_result": fast_fail, "retry_issues": struct_issues}
 
-    llm = ChatOpenAI(model="gpt-4o", temperature=0)
-    parser = JsonOutputParser(pydantic_object=ReviewResult)
-    prompt = ChatPromptTemplate.from_messages(
-        [("system", REVIEW_SYSTEM_PROMPT), ("human", REVIEW_USER_PROMPT)]
-    )
-    chain = prompt | llm | parser
+    chain = _build_review_chain()
 
     try:
         result: dict[str, object] = chain.invoke(  # type: ignore[assignment]
