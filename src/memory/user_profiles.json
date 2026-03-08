@@ -23,8 +23,67 @@
         "recipient_name": null,
         "subject_hint": "",
         "draft_summary": "Subject: Request for Information\n\nDear [Name],\n\nI am writing to request additional information regarding the project we discussed in our last meeting. It is essential for me to have a clearer understa..."
+      },
+      {
+        "date": "2026-03-08",
+        "intent": "other",
+        "recipient_type": "other",
+        "recipient_name": null,
+        "subject_hint": "",
+        "draft_summary": "Subject: Inquiry Regarding Upcoming Meeting\n\nDear [Name],\n\nI am writing to inquire about the agenda for the upcoming meeting scheduled for next week. Understanding the topics to be discussed will allo..."
+      },
+      {
+        "date": "2026-03-08",
+        "intent": "other",
+        "recipient_type": "unknown",
+        "recipient_name": "Sarah",
+        "subject_hint": "",
+        "draft_summary": "Subject: Request for Information\n\nDear Sarah,\n\nI am writing to request additional information regarding the recent project updates. Having a comprehensive understanding of the current status will enab..."
+      },
+      {
+        "date": "2026-03-08",
+        "intent": "apology",
+        "recipient_type": "client",
+        "recipient_name": "Sarah",
+        "subject_hint": "apology for delayed shipment",
+        "draft_summary": "Subject: Apology for Delayed Shipment\n\nDear Sarah,\n\nI would like to sincerely apologize for the delay in the shipment of your order.\n\nThis delay was due to unforeseen circumstances that impacted our l..."
+      },
+      {
+        "date": "2026-03-08",
+        "intent": "apology",
+        "recipient_type": "client",
+        "recipient_name": "Sarah",
+        "subject_hint": "apology for delayed shipment",
+        "draft_summary": "Subject: Apology for Delayed Shipment\n\nDear Sarah,\n\nI would like to sincerely apologize for the delay in the shipment of your order.\n\nThis delay was due to unforeseen circumstances that impacted our l..."
+      },
+      {
+        "date": "2026-03-08",
+        "intent": "internal_update",
+        "recipient_type": "colleague",
+        "recipient_name": "John",
+        "subject_hint": "Q1 report",
+        "draft_summary": "Subject: Update on the Q1 Report\n\nHi John,\n\nHope you're doing well! I wanted to touch base regarding the Q1 report.\n\nAs we approach the deadline, I thought it’d be good to see how everything's coming ..."
+      },
+      {
+        "date": "2026-03-08",
+        "intent": "informational",
+        "recipient_type": "partner",
+        "recipient_name": null,
+        "subject_hint": "new product launch",
+        "draft_summary": "Subject: New Product Launch Announcement\n\nDear [Name],\n\nWe are excited to announce the launch of our new product, which will be available starting next month. This innovative solution is designed to e..."
+      },
+      {
+        "date": "2026-03-08",
+        "intent": "outreach",
+        "recipient_type": "other",
+        "recipient_name": null,
+        "subject_hint": "referral email for software engineer role",
+        "draft_summary": "Subject: Referral for Software Engineer Role\n\nDear [Name],\n\nI hope this message finds you well. I am reaching out to discuss a potential candidate for the Software Engineer position within your team. ..."
       }
     ],
-    "known_contacts": {}
+    "known_contacts": {
+      "client": "Sarah",
+      "colleague": "John"
+    }
   }
 }

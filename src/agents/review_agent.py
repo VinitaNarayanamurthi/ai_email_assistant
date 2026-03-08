@@ -73,7 +73,8 @@ Bad issue descriptions (too vague):
   - "Tone is wrong."
   - "Needs improvement."
 
-Return a JSON object with fields: grammar_score, tone_alignment_score, coherence_score, structure_complete, issues (list), verdict (PASS or FAIL)."""
+Return your evaluation as:
+{format_instructions}"""
 
 REVIEW_USER_PROMPT = """Evaluate this email draft:
 
@@ -171,7 +172,7 @@ def _build_review_chain() -> object:
     parser = JsonOutputParser(pydantic_object=ReviewResult)
     prompt = ChatPromptTemplate.from_messages(
         [("system", REVIEW_SYSTEM_PROMPT), ("human", REVIEW_USER_PROMPT)]
-    )
+    ).partial(format_instructions=parser.get_format_instructions())
     return prompt | llm | parser
 
 

@@ -4,6 +4,11 @@ import urllib.parse
 import uuid
 from pathlib import Path
 
+from dotenv import load_dotenv
+
+# Load .env before any LangChain / OpenAI imports so the API key is available
+load_dotenv(dotenv_path=Path(__file__).resolve().parents[3] / ".env")
+
 import streamlit as st
 import streamlit.components.v1 as st_components
 
@@ -15,7 +20,7 @@ from src.workflow.langgraph_flow import build_graph, run_pipeline
 
 PROFILES_PATH = Path("src/memory/user_profiles.json")
 TONE_OPTIONS = ["formal", "casual", "assertive"]
-MODEL_OPTIONS = ["(auto)", "gpt-4o", "claude-3-5-sonnet-20241022", "cohere/command-r-plus"]
+LOCKED_MODEL = "gpt-4o-mini"
 PASS_THRESHOLDS = {
     "grammar_score": 0.75,
     "tone_alignment_score": 0.70,
@@ -88,8 +93,8 @@ def init_session_state() -> None:
 # ---------------------------------------------------------------------------
 
 
-def render_sidebar() -> tuple[str | None, str, bool, bool]:
-    """Render the sidebar and return (tone_selection, model_override, show_scores, show_trace)."""
+def render_sidebar() -> tuple[str | None, bool, bool]:
+    """Render the sidebar and return (tone_selection, show_scores, show_trace)."""
     st.sidebar.title("AI Email Assistant")
     st.sidebar.divider()
 
@@ -116,13 +121,11 @@ def render_sidebar() -> tuple[str | None, str, bool, bool]:
 
     # --- Advanced options ---
     with st.sidebar.expander("Advanced Options"):
-        model_choice = st.selectbox("Model override", options=MODEL_OPTIONS, index=0)
+        st.caption(f"Model: `{LOCKED_MODEL}` (locked)")
         show_scores = st.checkbox("Show review scores", value=True)
         show_trace = st.checkbox("Show agent trace", value=False)
 
-    model_override = None if model_choice == "(auto)" else model_choice
-
-    return selected_tone, model_override, show_scores, show_trace  # type: ignore[return-value]
+    return selected_tone, show_scores, show_trace  # type: ignore[return-value]
 
 
 # ---------------------------------------------------------------------------
@@ -271,7 +274,7 @@ def main() -> None:
 
     init_session_state()
 
-    selected_tone, model_override, show_scores, show_trace = render_sidebar()
+    selected_tone, show_scores, show_trace = render_sidebar()
 
     # -----------------------------------------------------------------------
     # Prompt input
@@ -307,9 +310,6 @@ def main() -> None:
         if not raw_input.strip():
             st.warning("Please enter a prompt before generating.")
         else:
-            prior_result = st.session_state.get("pipeline_result")
-            prior_edited = st.session_state.get("draft_edited", "")
-
             with st.status("Generating email...", expanded=True) as status_box:
                 st.write("Parsing your input...")
                 st.write("Detecting intent and tone...")
@@ -317,13 +317,6 @@ def main() -> None:
                 st.write("Personalising and reviewing...")
 
                 try:
-                    # Build initial state additions
-                    extra: dict = {}
-                    if model_override:
-                        extra["active_model"] = model_override
-                    if prior_edited and prior_result:
-                        extra["user_edited_draft"] = prior_edited
-
                     # Merge sidebar profile values into user_profile
                     profile = st.session_state["user_profile"]
 
@@ -335,9 +328,8 @@ def main() -> None:
                         compiled_graph=st.session_state["compiled_graph"],
                     )
 
-                    # Inject any model override into the result for display
-                    if model_override and not result.get("active_model"):
-                        result = {**result, "active_model": model_override}
+                    # Always display the single allowed model in the UI metadata.
+                    result = {**result, "active_model": LOCKED_MODEL}
 
                     st.session_state["pipeline_result"] = result
                     final_draft = str(result.get("final_draft") or "")
@@ -407,7 +399,7 @@ def main() -> None:
     col_meta1, col_meta2, col_meta3 = st.columns(3)
     intent_val = str(result.get("intent") or "")
     tone_val = str(result.get("tone") or "")
-    model_val = str(result.get("active_model") or "gpt-4o")
+    model_val = str(result.get("active_model") or LOCKED_MODEL)
     retries_val = int(result.get("retry_count") or 0)
 
     if intent_val:

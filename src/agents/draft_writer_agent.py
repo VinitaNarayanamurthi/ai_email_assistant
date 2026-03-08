@@ -66,12 +66,8 @@ CONSTRAINTS:
 
 {retry_instructions}
 
-Output format: Return a JSON object with exactly these fields:
-- subject_line (string)
-- salutation (string)
-- body_paragraphs (list of 2-4 strings, one per paragraph)
-- closing (string, 1-2 sentences)
-- sign_off (string)
+Output format:
+{format_instructions}
 
 Do not include markdown formatting inside field values. Plain text only."""
 
@@ -186,11 +182,10 @@ def _build_surgical_edit_chain(model: str) -> object:
 
 
 def _build_draft_chain(model: str, temperature: float) -> object:
-    
     parser = JsonOutputParser(pydantic_object=EmailDraftSchema)
     prompt = ChatPromptTemplate.from_messages(
         [("system", SYSTEM_PROMPT), ("human", USER_PROMPT)]
-    )
+    ).partial(format_instructions=parser.get_format_instructions())
     return prompt | llm | parser
 
 

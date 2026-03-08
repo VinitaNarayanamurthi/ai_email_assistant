@@ -1,4 +1,6 @@
 import json
+import argparse
+import uuid
 from pathlib import Path
 from typing import Optional
 
@@ -131,3 +133,56 @@ def run_pipeline(
 
     result: dict[str, object] = compiled_graph.invoke(initial_state, config)  # type: ignore[union-attr]
     return result
+
+
+def _main() -> None:
+    parser = argparse.ArgumentParser(description="Run the LangGraph email pipeline once.")
+    parser.add_argument(
+        "prompt",
+        nargs="?",
+        default="Write a formal follow-up email to Alex about tomorrow's project kickoff meeting.",
+        help="User input prompt for email generation.",
+    )
+    parser.add_argument("--user-id", default="default", help="User profile id.")
+    parser.add_argument(
+        "--tone",
+        default=None,
+        choices=["formal", "casual", "assertive"],
+        help="Optional UI tone selection override.",
+    )
+    parser.add_argument(
+        "--full-json",
+        action="store_true",
+        help="Print the entire final LangGraph state as JSON.",
+    )
+    args = parser.parse_args()
+
+    result = run_pipeline(
+        raw_input=args.prompt,
+        user_id=args.user_id,
+        ui_tone_selection=args.tone,
+        thread_id=str(uuid.uuid4()),
+    )
+
+    summary = {
+        "pipeline_status": result.get("pipeline_status"),
+        "pipeline_warning": result.get("pipeline_warning"),
+        "intent": result.get("intent"),
+        "tone": result.get("tone"),
+        "active_model": result.get("active_model"),
+        "retry_count": result.get("retry_count"),
+        "parse_error": result.get("parse_error"),
+        "draft_error": result.get("draft_error"),
+        "review_verdict": (result.get("review_result") or {}).get("verdict"),  # type: ignore[union-attr]
+        "final_draft_preview": str(result.get("final_draft") or "")[:500],
+    }
+
+    print(json.dumps(summary, indent=2, ensure_ascii=False))
+
+    if args.full_json:
+        print("\n--- FULL STATE ---")
+        print(json.dumps(result, indent=2, ensure_ascii=False, default=str))
+
+
+if __name__ == "__main__":
+    _main()

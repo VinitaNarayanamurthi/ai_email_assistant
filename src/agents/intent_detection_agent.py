@@ -78,6 +78,9 @@ Subject hint: {subject_hint}
 Constraints: {constraints}
 Context notes: {context_notes}
 {prior_hint}
+
+{format_instructions}
+
 Return a JSON object with fields: intent, confidence, reasoning."""
 
 
@@ -102,7 +105,7 @@ def build_intent_chain() -> object:
     parser = JsonOutputParser(pydantic_object=IntentResult)
     prompt = ChatPromptTemplate.from_messages(
         [("system", SYSTEM_PROMPT), ("human", USER_PROMPT)]
-    )
+    ).partial(format_instructions=parser.get_format_instructions())
     return prompt | llm | parser
 
 

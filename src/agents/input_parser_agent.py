@@ -1,4 +1,5 @@
 import sys
+import json
 from typing import Optional
 
 from langchain_core.output_parsers import JsonOutputParser
@@ -57,6 +58,8 @@ Tone hints (only if user explicitly states): formal, casual, assertive
 USER_PROMPT = """Parse the following email request:
 
 "{raw_input}"
+
+{format_instructions}
 
 Return a JSON object matching the schema exactly. Do not add extra fields."""
 
@@ -184,3 +187,50 @@ def input_parser_agent(state: EmailAssistantState) -> dict[str, object]:
             "parsed_context": fallback,
             "parse_error": f"Parsing degraded: {str(e)}",
         }
+
+
+def main() -> None:
+    """Run a quick manual test for the input parser agent."""
+    prompt = (
+       
+        "Write a formal apology email to client Sarah for a delayed shipment."
+    )
+
+    test_state: EmailAssistantState = {
+        "raw_input": prompt,
+        "user_profile": {"default_tone": "formal"},
+    }
+
+    output = input_parser_agent(test_state)
+    parsed_context_raw = output.get("parsed_context")
+    parsed_context: dict[str, object] = {}
+    if isinstance(parsed_context_raw, dict):
+        parsed_context = {str(k): v for k, v in parsed_context_raw.items()}
+
+    # Some model responses may use alternate keys; normalize for test validation.
+    if not parsed_context.get("recipient_name") and parsed_context.get("recipient"):
+        parsed_context["recipient_name"] = parsed_context.get("recipient")
+    if not parsed_context.get("subject_hint") and parsed_context.get("subject"):
+        parsed_context["subject_hint"] = parsed_context.get("subject")
+    if not parsed_context.get("subject_hint") and parsed_context.get("body"):
+        parsed_context["subject_hint"] = parsed_context.get("body")
+    if not parsed_context.get("tone_hint") and parsed_context.get("tone"):
+        parsed_context["tone_hint"] = parsed_context.get("tone")
+
+    is_valid, issues = validate_parsed_context(parsed_context)
+
+    print("=== INPUT PARSER TEST ===")
+    print(f"Prompt: {prompt}")
+    print(f"Parse error: {output.get('parse_error')}")
+    print(f"Valid parsed context: {is_valid}")
+    if issues:
+        print("Validation issues:")
+        for issue in issues:
+            print(f"- {issue}")
+
+    print("\nParsed context JSON:")
+    print(json.dumps(parsed_context, indent=2, ensure_ascii=False))
+
+
+if __name__ == "__main__":
+    main()
